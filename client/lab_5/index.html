@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Jerry Crews - Lab 5</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <!-- <script src="script.js"></script> -->
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-10 m-auto p-5 ">
+                        <div class="box has-background-info-light">
+                            <h1 class="title">Jerry Crews - Lab 5</h1>
+                        </div>
+                    </div>
+                    <div class="columns column is-10 m-auto">
+                        <div class="column is-one-third">
+                            <form action="/api" class="box">
+                                <div class="field">
+                                    <label for="first-name" class="label"
+                                        >First Name</label
+                                    >
+                                    <div class="control">
+                                        <input
+                                            type="text"
+                                            class="input"
+                                            id="first-name"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="food-preference" class="label"
+                                        >Food Preference</label
+                                    >
+                                    <div class="control">
+                                        <input
+                                            type="text"
+                                            class="input"
+                                            id="food-preference"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="veggie-vegan" class="label"
+                                        >Veggie or Vegan?</label
+                                    >
+                                    <div class="control" name="veggie-vegan">
+                                        <label class="radio">
+                                            <input type="radio" name="answer" />
+                                            Yes
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" name="answer" />
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <button class="button is-link">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="column is-two-thirds is-align-self-center">
+                            <div class="box">
+                                <p>
+                                    This is going to be somethign in two weeks
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
