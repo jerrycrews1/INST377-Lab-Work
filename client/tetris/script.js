@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         freeze()
     }
     // make the tetromino move down every second
-    timerId = setInterval(moveDown, 100)
+    timerId = setInterval(moveDown, 1000)
 
     // move the tetromino left
     const moveLeft = () => {
@@ -156,16 +156,27 @@ document.addEventListener('DOMContentLoaded', () => {
         draw()
     }
 
+    // rotate
+    const rotate = () => {
+        undraw()
+        currentRotation++
+        if (currentRotation === current.length) {
+            currentRotation = 0
+        }
+        current = theTetrominoes[random][currentRotation]
+        draw()
+    }
+
     const control = (e) => {
         switch (e.keyCode) {
             case 37:
                 moveLeft()
                 break
             case 38:
-                // roate()
+                rotate()
                 break
             case 39:
-                // moveRight()
+                moveRight()
                 break
             case 40:
                 // moveDown()
