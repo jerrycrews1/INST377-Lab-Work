@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable no-plusplus */
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
@@ -116,5 +117,62 @@ document.addEventListener('DOMContentLoaded', () => {
     // make the tetromino move down every second
     timerId = setInterval(moveDown, 100)
 
+    // move the tetromino left
+    const moveLeft = () => {
+        undraw()
+        const isAtLeftEdge = current.some(
+            (index) => (currentPosition + index) % width === 0
+        )
+        if (!isAtLeftEdge) {
+            currentPosition -= 1
+        }
 
+        if (
+            current.some((index) =>
+                squares[currentPosition + index].classList.containes('taken')
+            )
+        ) {
+            currentPosition += 1
+        }
+        draw()
+    }
+
+    const moveRight = () => {
+        undraw()
+        const isAtRightEdge = current.some(
+            (index) => (currentPosition + index) % width === width - 1
+        )
+        if (!isAtRightEdge) {
+            currentPosition += 1
+        }
+
+        if (
+            current.some((index) =>
+                squares[currentPosition + index].classList.contains('taken')
+            )
+        ) {
+            currentPosition -= 1
+        }
+        draw()
+    }
+
+    const control = (e) => {
+        switch (e.keyCode) {
+            case 37:
+                moveLeft()
+                break
+            case 38:
+                // roate()
+                break
+            case 39:
+                // moveRight()
+                break
+            case 40:
+                // moveDown()
+                break
+            default:
+                break
+        }
+    }
+    document.addEventListener('keyup', control)
 })
