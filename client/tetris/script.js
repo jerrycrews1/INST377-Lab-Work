@@ -1,3 +1,8 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable comma-dangle */
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-loop-func */
 /* eslint-disable indent */
 /* eslint-disable no-plusplus */
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,12 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreDisplay = document.querySelector('#score')
     const startBtn = document.querySelector('#start-button')
     const width = 10
-    const displayWidth = 10
-    let displayIndex = 0
+    const displayWidth = 4
+    const displayIndex = 0
     let nextRandom = 0
     let timerId
+    let score = 0
+    const colors = ['orange', 'red', 'purple', 'green', 'blue']
 
-    //The Tetrominoes
+    // The Tetrominoes
     const lTetromino = [
         [1, width + 1, width * 2 + 1, 2],
         [width, width + 1, width + 2, width * 2 + 2],
@@ -67,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const createDivs = () => {
         // main divs
-        for (i = 0; i < 200; i++) {
+        for (let i = 0; i < 200; i++) {
             const div = document.createElement('div')
             grid.appendChild(div)
         }
         // taken divs
-        for (i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
             const div = document.createElement('div')
             div.classList.add('taken')
             grid.appendChild(div)
@@ -80,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         squares = Array.from(document.querySelectorAll('.grid div'))
 
         // mini divs
-        for (i = 0; i < 16; i++) {
+        for (let i = 0; i < 16; i++) {
             const div = document.createElement('div')
             miniGrid.appendChild(div)
         }
@@ -99,6 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const draw = () => {
         current.forEach((index) => {
             squares[currentPosition + index].classList.add('tetromino')
+            squares[currentPosition + index].style.backgroundColor =
+                colors[random]
         })
     }
 
@@ -106,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const undraw = () => {
         current.forEach((index) => {
             squares[currentPosition + index].classList.remove('tetromino')
+            squares[currentPosition + index].style.backgroundColor = ''
         })
     }
 
@@ -115,10 +125,45 @@ document.addEventListener('DOMContentLoaded', () => {
         // remove class 'tetromino' from entire mini-grid
         displaySquares.forEach((square) => {
             square.classList.remove('tetromino')
+            square.style.backgroundColor = ''
         })
         upNextTetrominoes[nextRandom].forEach((index) => {
             displaySquares[displayIndex + index].classList.add('tetromino')
+            displaySquares[displayIndex + index].style.backgroundColor =
+                colors[nextRandom]
         })
+    }
+
+    const addScore = () => {
+        for (let i = 0; i < 199; i += width) {
+            const row = [
+                i,
+                i + 1,
+                i + 2,
+                i + 3,
+                i + 4,
+                i + 5,
+                i + 6,
+                i + 7,
+                i + 8,
+                i + 9,
+            ]
+
+            if (
+                row.every((index) => squares[index].classList.contains('taken'))
+            ) {
+                score += 10
+                scoreDisplay.innerHTML = score
+                row.forEach((index) => {
+                    squares[index].classList.remove('taken')
+                    squares[index].classList.remove('tetromino')
+                    squares[index].style.backgroundColor = ''
+                })
+                const squaresRemoved = squares.splice(i, width)
+                squares = squaresRemoved.concat(squares)
+                squares.forEach((cell) => grid.appendChild(cell))
+            }
+        }
     }
 
     // freeze function
@@ -141,6 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPosition = 4
             draw()
             displayMiniGridShape()
+            addScore()
+            gameOver()
         }
     }
 
@@ -163,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (
             current.some((index) =>
-                squares[currentPosition + index].classList.containes('taken')
+                squares[currentPosition + index].classList.contains('taken')
             )
         ) {
             currentPosition += 1
@@ -227,9 +274,20 @@ document.addEventListener('DOMContentLoaded', () => {
             timerId = null
         } else {
             draw()
-            timerId = setInterval(moveDown, 1000)
+            timerId = setInterval(moveDown, 300)
             nextRandom = Math.floor(Math.random() * theTetrominoes.length)
             displayMiniGridShape()
         }
     })
+
+    const gameOver = () => {
+        if (
+            current.some((index) =>
+                squares[currentPosition + index].classList.contains('taken')
+            )
+        ) {
+            scoreDisplay.innerHTML = 'end'
+            clearInterval(timerId)
+        }
+    }
 })
