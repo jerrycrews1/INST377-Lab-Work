@@ -2,6 +2,7 @@
 /* eslint-disable no-plusplus */
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
+    const miniGrid = document.querySelector('.mini-grid')
     let squares
     const scoreDisplay = document.querySelector('#score')
     const startBtn = document.querySelector('#start-button')
@@ -52,17 +53,24 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
 
     const createDivs = () => {
+        // main divs
         for (i = 0; i < 200; i++) {
             const div = document.createElement('div')
             grid.appendChild(div)
         }
-
+        // taken divs
         for (i = 0; i < 10; i++) {
             const div = document.createElement('div')
             div.classList.add('taken')
             grid.appendChild(div)
         }
         squares = Array.from(document.querySelectorAll('.grid div'))
+
+        // mini divs
+        for (i = 0; i < 16; i++) {
+            const div = document.createElement('div')
+            miniGrid.appendChild(div)
+        }
     }
     createDivs()
 
