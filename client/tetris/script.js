@@ -4,9 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
     const miniGrid = document.querySelector('.mini-grid')
     let squares
+    let displaySquares
     const scoreDisplay = document.querySelector('#score')
     const startBtn = document.querySelector('#start-button')
     const width = 10
+    const displayWidth = 10
+    let displayIndex = 0
+    let nextRandom = 0
+    let timerId
 
     //The Tetrominoes
     const lTetromino = [
@@ -52,6 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
         iTetromino,
     ]
 
+    const upNextTetrominoes = [
+        [1, displayWidth + 1, displayWidth * 2 + 1, 2], // lTetromino
+        [0, displayWidth, displayWidth + 1, displayWidth * 2 + 1], // zTetromino
+        [1, displayWidth, displayWidth + 1, displayWidth + 2], // tTetromino
+        [0, 1, displayWidth, displayWidth + 1], // oTetromino
+        [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1], // iTetromino
+    ]
+
     const createDivs = () => {
         // main divs
         for (i = 0; i < 200; i++) {
@@ -71,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div')
             miniGrid.appendChild(div)
         }
+        displaySquares = document.querySelectorAll('.mini-grid div')
     }
     createDivs()
 
@@ -95,6 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
+    // display the shape in the mini grid
+
+    const displayMiniGridShape = () => {
+        // remove class 'tetromino' from entire mini-grid
+        displaySquares.forEach((square) => {
+            square.classList.remove('tetromino')
+        })
+        upNextTetrominoes[nextRandom].forEach((index) => {
+            displaySquares[displayIndex + index].classList.add('tetromino')
+        })
+    }
+
     // freeze function
     const freeze = () => {
         if (
@@ -109,10 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
             })
 
             // start a new tetromino falling
-            random = Math.floor(Math.random() * theTetrominoes.length)
+            random = nextRandom
+            nextRandom = Math.floor(Math.random() * theTetrominoes.length)
             current = theTetrominoes[random][currentRotation]
             currentPosition = 4
             draw()
+            displayMiniGridShape()
         }
     }
 
@@ -122,8 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
         draw()
         freeze()
     }
-    // make the tetromino move down every second
-    timerId = setInterval(moveDown, 1000)
 
     // move the tetromino left
     const moveLeft = () => {
@@ -194,4 +220,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     document.addEventListener('keyup', control)
+
+    startBtn.addEventListener('click', () => {
+        if (timerId) {
+            clearInterval(timerId)
+            timerId = null
+        } else {
+            draw()
+            timerId = setInterval(moveDown, 1000)
+            nextRandom = Math.floor(Math.random() * theTetrominoes.length)
+            displayMiniGridShape()
+        }
+    })
 })
