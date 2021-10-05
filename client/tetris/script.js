@@ -64,4 +64,33 @@ document.addEventListener('DOMContentLoaded', () => {
         squares = Array.from(document.querySelectorAll('.grid div'))
     }
     createDivs()
+
+    // randomly assign tetromino
+    let random = Math.floor(Math.random() * theTetrominoes.length)
+    let currentPosition = 4
+    let currentRotation = 0
+    let current = theTetrominoes[random][currentRotation]
+
+    // draw the tetromino
+
+    const draw = () => {
+        current.forEach((index) => {
+            squares[currentPosition + index].classList.add('tetromino')
+        })
+    }
+
+    // undraw the tetromino
+    const undraw = () => {
+        current.forEach((index) => {
+            squares[currentPosition + index].classList.remove('tetromino')
+        })
+    }
+
+    const moveDown = () => {
+        undraw()
+        currentPosition += width
+        draw()
+    }
+    // make the tetromino move down every second
+    timerId = setInterval(moveDown, 100)
 })
