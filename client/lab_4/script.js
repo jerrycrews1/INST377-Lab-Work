@@ -6,6 +6,8 @@ let currentPosition = 0 // start at the beginning
 
 const previous = () => {
     // go to previous image
+    prevButton.classList.add('active')
+    nextButton.classList.remove('active')
     let nextImageIndex =
         currentPosition !== 0 ? currentPosition - 1 : photos.length - 1
     changeImage(nextImageIndex)
@@ -13,6 +15,8 @@ const previous = () => {
 }
 
 const next = () => {
+    prevButton.classList.remove('active')
+    nextButton.classList.add('active')
     // go to next image
     let nextImageIndex =
         currentPosition !== photos.length - 1 ? currentPosition + 1 : 0
