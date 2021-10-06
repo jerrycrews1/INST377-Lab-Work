@@ -49,7 +49,7 @@ async function windowActions() {
           </li>
         `
         })
-        // .join('')
+        .join('')
         suggestions.innerHTML = html
     }
 
