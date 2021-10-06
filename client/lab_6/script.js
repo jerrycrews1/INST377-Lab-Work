@@ -5,16 +5,11 @@
 /* eslint-disable operator-linebreak */
 
 async function windowActions() {
-    // const endpoint =
-    //     'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json'
-
     const endpoint =
         'https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json'
     const request = await fetch(endpoint)
-    console.log(request)
     const arrayName = await request.json()
 
-    console.log(arrayName)
     function findMatches(wordToMatch, arrayName) {
         return arrayName.filter((establishment) => {
             // here we need to figure out if the city or state matches what was searched
@@ -24,10 +19,6 @@ async function windowActions() {
                 establishment.category.match(regex)
             )
         })
-    }
-
-    function numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 
     function displayMatches(event) {
