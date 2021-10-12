@@ -12,7 +12,6 @@ async function getAllHalls(req, res, next) {
     res.json(newDining);
   } catch (err) {
     console.error(err);
-    res.error('Server error');
   }
 }
 
