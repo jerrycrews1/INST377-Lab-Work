@@ -9,17 +9,25 @@ async function dataHandler() {
         'https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json'
     const request = await fetch(endpoint)
     const arrayName = await request.json()
-    let newArray = []
+    let markerGroup
 
     function findMatches(wordToMatch, arrayName) {
-        newArray = arrayName.filter((establishment) => {
-            // here we need to figure out if the city or state matches what was searched
-            const regex = new RegExp(wordToMatch, 'gi')
-            return establishment.zip.match(regex)
-            // establishment.category.match(regex)
-        })
-        newArray = newArray.slice(0, 5)
-        return newArray
+        const regex = new RegExp(wordToMatch, 'gi')
+        const smallArray = arrayName.reduce((acc, cur) => {
+            const isAlreadyIncluded = acc.find(
+                (item) => item.establishment_id === cur.establishment_id
+            )
+            if (
+                !isAlreadyIncluded &&
+                cur.geocoded_column_1 &&
+                cur.zip.match(regex)
+            ) {
+                acc.push(cur)
+                return acc
+            }
+            return acc
+        }, [])
+        return smallArray.slice(0, 5)
     }
 
     function displayMatches(evt) {
@@ -29,7 +37,6 @@ async function dataHandler() {
         )
         const html = matchArray
             .map((establishment) => {
-                console.log(establishment)
                 const regex = new RegExp(evt.target.elements.search.value, 'gi')
                 const zipCode = establishment.zip.replace(
                     regex,
@@ -48,11 +55,38 @@ async function dataHandler() {
             })
             .join('')
         suggestions.innerHTML = html
+        if (matchArray.length > 0) {
+            const firstItem = matchArray[0]
+            mymap.setView(
+                [
+                    firstItem.geocoded_column_1.coordinates[1],
+                    firstItem.geocoded_column_1.coordinates[0],
+                ],
+                13
+            )
+            const markers = []
+            matchArray.forEach((establishment) => {
+                const lat = establishment.geocoded_column_1.coordinates[1]
+                const lon = establishment.geocoded_column_1.coordinates[0]
+                console.log(lat, lon)
+                const marker = L.marker([lat, lon]).addTo(mymap)
+                markers.push(marker)
+            })
+            markerGroup = L.layerGroup(markers).addTo(mymap)
+        }
     }
 
     const searchForm = document.querySelector('#searchForm')
     const searchInput = document.querySelector('.search')
     const suggestions = document.querySelector('.suggestions')
+
+    searchInput.addEventListener('input', (evt) => {
+        if (evt.target.value === '') {
+            suggestions.innerHTML = ''
+            console.log('no input')
+            markerGroup.clearLayers()
+        }
+    })
 
     searchForm.addEventListener('submit', (evt) => {
         evt.preventDefault()
@@ -76,11 +110,8 @@ function mapInit() {
                 'pk.eyJ1IjoiamVycnljcmV3czEiLCJhIjoiY2t1cGtldHdwMnFmejJvb2Y1MDh0bnF1OCJ9.uNWyKQvywtxEFztz08bghw',
         }
     ).addTo(mymap)
-    newArray.forEach((establishment) => {
-        console.log(establishment)
-        // L.marker([establishment])
-    })
+    return mymap
 }
 
 dataHandler()
-mapInit()
+const mymap = mapInit()
