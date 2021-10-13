@@ -96,7 +96,7 @@ async function dataHandler() {
 }
 
 function mapInit() {
-    const mymap = L.map('mapid').setView([51.505, -0.09], 13)
+    const mymap = L.map('mapid').setView([38.83, -76.85], 13)
     L.tileLayer(
         'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamVycnljcmV3czEiLCJhIjoiY2t1cGtldHdwMnFmejJvb2Y1MDh0bnF1OCJ9.uNWyKQvywtxEFztz08bghw',
         {
