@@ -9,20 +9,24 @@ async function dataHandler() {
         'https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json'
     const request = await fetch(endpoint)
     const arrayName = await request.json()
+    let newArray = []
 
     function findMatches(wordToMatch, arrayName) {
-        return arrayName.filter((establishment) => {
+        newArray = arrayName.filter((establishment) => {
             // here we need to figure out if the city or state matches what was searched
             const regex = new RegExp(wordToMatch, 'gi')
-            return (
-                establishment.zip.match(regex)
-                // establishment.category.match(regex)
-            )
+            return establishment.zip.match(regex)
+            // establishment.category.match(regex)
         })
+        newArray = newArray.slice(0, 5)
+        return newArray
     }
 
     function displayMatches(evt) {
-        const matchArray = findMatches(evt.target.elements.search.value, arrayName)
+        const matchArray = findMatches(
+            evt.target.elements.search.value,
+            arrayName
+        )
         const html = matchArray
             .map((establishment) => {
                 console.log(establishment)
@@ -72,6 +76,10 @@ function mapInit() {
                 'pk.eyJ1IjoiamVycnljcmV3czEiLCJhIjoiY2t1cGtldHdwMnFmejJvb2Y1MDh0bnF1OCJ9.uNWyKQvywtxEFztz08bghw',
         }
     ).addTo(mymap)
+    newArray.forEach((establishment) => {
+        console.log(establishment)
+        // L.marker([establishment])
+    })
 }
 
 dataHandler()

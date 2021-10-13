@@ -9,10 +9,9 @@
     display: flex;
 }
 
-.wrapper > div{
+.wrapper > div {
     width: 50%;
 }
 #mapid {
     height: 500px;
 }
-
